@@ -3,6 +3,9 @@ package com.blockchain.game.models;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 
+import com.owlike.genson.annotation.JsonConverter;
+import com.owlike.genson.annotation.JsonIgnore;
+
 public class Transaction implements Serializable{
 
 	/* 	Ablauf transparent
@@ -61,10 +64,7 @@ public class Transaction implements Serializable{
 		this.setTxId(SHA3Helper.hash256(this));
 	}	
 	
-	
-	
-	
-	
+	@JsonConverter(HashConverter.class)
 	public byte[] getSender() {
 		return sender;
 	}
@@ -73,6 +73,7 @@ public class Transaction implements Serializable{
 		this.sender = sender;
 	}
 
+	@JsonConverter(HashConverter.class)
 	public byte[] getReceiver() {
 		return receiver;
 	}
@@ -118,6 +119,11 @@ public class Transaction implements Serializable{
 		this.txId = SHA3Helper.hash256(this);
 		return txId;
 	}
+	
+	@JsonIgnore
+	public byte[] getTxIdAsString() {
+		return SHA3Helper.hash256(this);
+	}
 
 	public void setTxId(byte[] txId) {
 		this.txId = txId;
@@ -143,6 +149,7 @@ public class Transaction implements Serializable{
 		return sizeInByte;
 	}
 
+	@JsonIgnore
 	public void setSizeInByte(int sizeInByte) {
 		this.sizeInByte = sizeInByte;
 	}
@@ -155,10 +162,12 @@ public class Transaction implements Serializable{
 		this.receivedTimeStamp = receivedTimeStamp;
 	}
 
+	@JsonConverter(HashConverter.class)
 	public byte[] getBlockId() {
 		return blockId;
 	}
 
+	@JsonIgnore
 	public void setBlockId(byte[] blockId) {
 		this.blockId = blockId;
 	}
